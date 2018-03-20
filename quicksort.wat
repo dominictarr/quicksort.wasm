@@ -13,7 +13,7 @@
           (then
             (set_local $lo (i32.add (get_local $lo) (i32.const 4)))
             (br $while1)
-        )))
+      )))
 
       ;; increase upper bound
 
@@ -38,36 +38,68 @@
       (i32.store (get_local $hi) (i32.load (get_local $lo)) )
       (i32.store (get_local $lo) (get_local $tmp) )
 
-;;      (br $forever)
+      (br $forever)
     )
 
     (get_local $hi)
   )
 
-  ;;(func $sort (param $ptr i32) (param $len i32)
-  ;;  (local $mid i32)
-  ;;  (if (i32.le_s (get_local $len) (i32.const 1)) (then (return)))
+  (func $sort (param $lo i32) (param $hi i32) (result i32)
+    (local $mid i32)
 
-  ;;  (set_local $mid (i32.div_s (i32.const 2)))
-  ;;)
+    (if
+      (i32.ge_s (get_local $lo) (get_local $hi))
+      (then (return (get_local $hi)))
+    )
+
+    (set_local $mid
+      (i32.mul
+        (i32.div_s
+          (i32.div_s
+            (i32.add (get_local $lo) (get_local $hi))
+            (i32.const 4)
+          )
+          (i32.const 2)
+        )
+        (i32.const 4)
+    ))
+
+    (set_local $mid (call $partition
+      (get_local $lo)
+      (get_local $hi)
+      (i32.load (get_local $mid))
+    ))
+
+    (if
+      (i32.lt_u
+        (get_local $lo)
+        (i32.sub (get_local $mid) (i32.const 4))
+      )
+      (then
+        (call $sort
+          (get_local $lo)
+          (i32.sub (get_local $mid) (i32.const 4))
+        )
+        (drop)
+    ))
+
+    (if
+      (i32.lt_u
+        (i32.add (get_local $mid) (i32.const 4))
+        (get_local $hi)
+      )
+      (then
+        (call $sort
+          (i32.add (get_local $mid) (i32.const 4))
+          (get_local $hi)
+        )
+        (drop)
+    ))
+
+    (get_local $mid)
+  )
 
   (export "partition" (func $partition))
+  (export "sort" (func $sort))
 )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

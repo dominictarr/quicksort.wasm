@@ -19,5 +19,7 @@ exports.partition = function (lo, hi, pivot) {
   return instance.exports.partition(lo, hi, pivot)
 }
 
+exports.sort = instance.exports.sort
+
 exports.buffer = b
 
