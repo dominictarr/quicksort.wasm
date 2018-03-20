@@ -9,7 +9,7 @@
       ;; increase lower bound
       (loop $while1
         (if
-          (i32.lt_u (i32.load (get_local $lo)) (get_local $pivot))
+          (i32.lt_s (i32.load (get_local $lo)) (get_local $pivot))
           (then
             (set_local $lo (i32.add (get_local $lo) (i32.const 4)))
             (br $while1)
@@ -19,7 +19,7 @@
 
       (loop $while2
         (if
-        (i32.gt_u (i32.load (get_local $hi)) (get_local $pivot))
+        (i32.gt_s (i32.load (get_local $hi)) (get_local $pivot))
         (then
           (set_local $hi (i32.sub (get_local $hi) (i32.const 4)))
           (br $while2)
@@ -38,6 +38,8 @@
       (i32.store (get_local $hi) (i32.load (get_local $lo)) )
       (i32.store (get_local $lo) (get_local $tmp) )
 
+      (set_local $hi (i32.sub (get_local $hi) (i32.const 4)))
+
       (br $forever)
     )
 
@@ -51,6 +53,8 @@
       (i32.ge_s (get_local $lo) (get_local $hi))
       (then (return (get_local $hi)))
     )
+
+    ;; this is ugly. pretty sure could tidy up but this works
 
     (set_local $mid
       (i32.mul
