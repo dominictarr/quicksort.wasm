@@ -1,8 +1,11 @@
 (module
   (memory (export "memory") 1)
   (func $partition (param $lo i32) (param $hi i32) (param $pivot i32) (result i32)
-
     (local $tmp i32)
+    (if
+      (i32.gt_u (i32.add (get_local $lo) (i32.const 4)) (get_local $hi))
+      (then (return (get_local $hi)))
+    )
 
     (loop $forever
 
@@ -59,10 +62,7 @@
     (set_local $mid
       (i32.mul
         (i32.div_s
-          (i32.div_s
-            (i32.add (get_local $lo) (get_local $hi))
-            (i32.const 4)
-          )
+          (i32.div_s (i32.add (get_local $lo) (get_local $hi)) (i32.const 4))
           (i32.const 2)
         )
         (i32.const 4)
@@ -74,31 +74,17 @@
       (i32.load (get_local $mid))
     ))
 
-    (if
-      (i32.lt_u
-        (get_local $lo)
-        (i32.sub (get_local $mid) (i32.const 4))
-      )
-      (then
-        (call $sort
-          (get_local $lo)
-          (i32.sub (get_local $mid) (i32.const 4))
-        )
-        (drop)
-    ))
+    (call $sort
+      (get_local $lo)
+      (i32.sub (get_local $mid) (i32.const 4))
+    )
+    (drop)
 
-    (if
-      (i32.lt_u
-        (i32.add (get_local $mid) (i32.const 4))
-        (get_local $hi)
-      )
-      (then
-        (call $sort
-          (i32.add (get_local $mid) (i32.const 4))
-          (get_local $hi)
-        )
-        (drop)
-    ))
+    (call $sort
+      (i32.add (get_local $mid) (i32.const 4))
+      (get_local $hi)
+    )
+    (drop)
 
     (get_local $mid)
   )
