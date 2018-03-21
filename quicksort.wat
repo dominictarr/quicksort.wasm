@@ -22,10 +22,10 @@
 
       (loop $while2
         (if
-        (i32.gt_s (i32.load (get_local $hi)) (get_local $pivot))
-        (then
-          (set_local $hi (i32.sub (get_local $hi) (i32.const 4)))
-          (br $while2)
+          (i32.gt_s (i32.load (get_local $hi)) (get_local $pivot))
+          (then
+            (set_local $hi (i32.sub (get_local $hi) (i32.const 4)))
+            (br $while2)
       )))
 
       ;; return if we are sorted
@@ -57,16 +57,19 @@
       (return (get_local $hi))
     )
 
-    ;; this is ugly. pretty sure could tidy up but this works
 
+    ;; make sure mid is alligned to the same bytes that hi and lo are.
+    ;; probably would be faster to use bitshift
     (set_local $mid
       (i32.mul
         (i32.div_s
-          (i32.div_s (i32.add (get_local $lo) (get_local $hi)) (i32.const 4))
+          (i32.div_s
+            (i32.add (get_local $lo) (get_local $hi))
+          (i32.const 4))
           (i32.const 2)
         )
-        (i32.const 4)
-    ))
+        (i32.const 4))
+    )
 
     (set_local $mid (call $partition
       (get_local $lo)
