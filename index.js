@@ -13,7 +13,8 @@ var m = WebAssembly.Module(wasm)
 var instance = WebAssembly.Instance(m)
 //module.exports = instance.exports
 
-var b = new Buffer(instance.exports.memory.buffer)
+//console.log(instance)
+instance.exports.memory.grow(100)
 
 exports.partition = function (lo, hi, pivot) {
   return instance.exports.partition(lo, hi, pivot)
@@ -21,5 +22,11 @@ exports.partition = function (lo, hi, pivot) {
 
 exports.sort = instance.exports.sort
 
-exports.buffer = b
+exports.buffer = new Buffer(instance.exports.memory.buffer)
+
+exports.grow = function (n) {
+  instance.exports.memory.grow(n)
+  exports.buffer = new Buffer(instance.exports.memory.buffer)
+}
+
 
