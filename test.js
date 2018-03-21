@@ -68,6 +68,7 @@ function testSort (ary) {
     var _buffer = quicksort.buffer.slice(0, ary.length*4)
     t.deepEqual(_buffer, UInt32LEArray(ary.slice().sort(cmp)))
     console.log(fromUInt32LEArray(_buffer))
+    console.log(new Int32Array(_buffer.buffer, 0, _buffer.length/4))
     t.end()
   })
 }
@@ -94,5 +95,6 @@ testSort([10, 2, 100])
 testSort([1])
 testSort([1,1,1])
 testSort([1,2, 1])
+
 
 

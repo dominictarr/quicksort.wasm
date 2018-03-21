@@ -1,6 +1,6 @@
 # quicksort.wasm
 
-quicksort (signed i32 values only) hand written in wat
+quicksort (signed i32 values only) hand-written in wat
 
 ## example
 
@@ -16,10 +16,18 @@ quicksort.buffer.writeUInt32LE(3, 0)
 //pass pointers first and last item
 quicksort.sort(0, 8)
 
-console.log(quicksort.buffer.slice(0, 12))
+var b = quicksort.buffer.slice(0, 12)
+//values are stored LITTLE ENDIAN, use Int32Array to see as human readable numbers
+console.log(new Int32Array(b.buffer, 0, b.length/4))
 ```
 
 ## License
 
 MIT
+
+
+
+
+
+
 
