@@ -4,7 +4,7 @@
     (local $tmp i32)
     (if
       (i32.gt_u (i32.add (get_local $lo) (i32.const 4)) (get_local $hi))
-      (then (return (get_local $hi)))
+      (return (get_local $hi))
     )
 
     (loop $forever
@@ -32,7 +32,7 @@
 
       (if
         (i32.ge_u (get_local $lo) (get_local $hi))
-        (then (return (get_local $hi)))
+        (return (get_local $hi))
       )
 
       ;; swap hi and lo
@@ -54,7 +54,7 @@
 
     (if
       (i32.ge_s (get_local $lo) (get_local $hi))
-      (then (return (get_local $hi)))
+      (return (get_local $hi))
     )
 
     ;; this is ugly. pretty sure could tidy up but this works
