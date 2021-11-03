@@ -9,8 +9,8 @@ var wasm = fs.readFileSync(path.join(__dirname, './quicksort.wasm'))
 //there are infuriating arbitary limits on loading wasm sync
 //(that differ between js engines of course) but this module is tiny
 
-var m = WebAssembly.Module(wasm)
-var instance = WebAssembly.Instance(m)
+var m = new WebAssembly.Module(wasm)
+var instance = new WebAssembly.Instance(m)
 //module.exports = instance.exports
 
 //console.log(instance)
